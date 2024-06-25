@@ -3,27 +3,43 @@ package cn.rzpt.domain.user.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.rzpt.domain.user.model.req.UserLoginReq;
 import cn.rzpt.domain.user.model.res.LoginResult;
-import cn.rzpt.domain.user.model.vo.RegisterUserVO;
 import cn.rzpt.domain.user.service.IUserExec;
 import cn.rzpt.domain.user.service.UserBase;
+import cn.rzpt.infrastructure.po.UserPO;
+import cn.rzpt.infrastructure.properties.JwtProperties;
 import cn.rzpt.infrastructure.repository.UserRepository;
+import cn.rzpt.infrastructure.util.JwtUtil;
+import com.alibaba.fastjson.JSON;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static cn.rzpt.common.Constants.RedisKey.LOGIN_USER_INFO;
+
 
 @Service("userExec")
 @RequiredArgsConstructor
 public class UserExecImpl extends UserBase implements IUserExec {
 
+    @Resource
+    private RedisTemplate<String,String> redisTemplate;
+    private final JwtProperties jwtProperties;
     private final UserRepository userRepository;
 
     @Override
     public LoginResult login(UserLoginReq req) {
         super.log.info("userExec:{}", req);
-        RegisterUserVO registerUserVO = userRepository.login(req);
-        if (ObjectUtil.isEmpty(registerUserVO)) {
+        UserPO userPO = userRepository.login(req);
+        if (ObjectUtil.isEmpty(userPO)) {
             throw new RuntimeException("账号或密码错误");
         }
-        //TODO 颁发令牌
-        return LoginResult.builder().token("token").build();
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", userPO.getId());
+        redisTemplate.opsForValue().set(LOGIN_USER_INFO + userPO.getId(), JSON.toJSONString(userPO));
+        return LoginResult.builder().token(JwtUtil.createJWT(jwtProperties.getSecret(), 64800L, map)).build();
     }
 }

@@ -20,16 +20,10 @@ public class UserRepository implements IUserRepository {
     private final UserMapper userMapper;
 
     @Override
-    public RegisterUserVO login(UserLoginReq req) {
+    public UserPO login(UserLoginReq req) {
         LambdaQueryWrapper<UserPO> queryWrapper = Wrappers.lambdaQuery(UserPO.class)
                 .eq(UserPO::getUsername, req.getUsername())
                 .eq(UserPO::getPassword, req.getPassword());
-        UserPO userPO = userMapper.selectOne(queryWrapper);
-        return RegisterUserVO.builder()
-                .username(userPO.getUsername())
-                .avatar(userPO.getAvatar())
-                .address(userPO.getAddress())
-                .email(userPO.getEmail())
-                .build();
+        return userMapper.selectOne(queryWrapper);
     }
 }

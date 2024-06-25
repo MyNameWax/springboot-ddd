@@ -5,13 +5,16 @@ import java.io.Serializable;
 public class Result implements Serializable {
     private static final long serialVersionUID = -3826891916021780628L;
     private String code;
-    private String info;
+    private Object info;
 
     public static Result buildResult(Constants.ResponseCode code) {
         return new Result(code.getCode(),code.getInfo());
     }
     public static Result buildResult(Constants.ResponseCode code, String info) {
         return new Result(code.getCode(), info);
+    }
+    public static Result buildResult(Constants.ResponseCode code, Object data) {
+        return new Result(code.getCode(), data);
     }
     public static Result buildResult(Constants.ResponseCode code, Constants.ResponseCode info) {
         return new Result(code.getCode(), info.getInfo());
@@ -28,7 +31,7 @@ public class Result implements Serializable {
         return new Result(Constants.ResponseCode.UN_ERROR.getCode(), info);
     }
 
-    public Result(String code, String info) {
+    public Result(String code, Object info) {
         this.code = code;
         this.info = info;
     }
@@ -41,11 +44,12 @@ public class Result implements Serializable {
         this.code = code;
     }
 
-    public String getInfo() {
+
+    public Object getInfo() {
         return info;
     }
 
-    public void setInfo(String info) {
+    public void setInfo(Object info) {
         this.info = info;
     }
 }

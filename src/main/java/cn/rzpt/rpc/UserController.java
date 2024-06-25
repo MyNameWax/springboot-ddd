@@ -23,7 +23,7 @@ public class UserController {
     @PostMapping("/login")
     public Result login(@RequestBody UserLoginReq userLoginReq) {
         LoginResult login = userExec.login(userLoginReq);
-        return Result.buildResult(Constants.ResponseCode.SUCCESS, JSON.toJSONString(login));
+        return Result.buildResult(Constants.ResponseCode.SUCCESS, login);
     }
 
 }
