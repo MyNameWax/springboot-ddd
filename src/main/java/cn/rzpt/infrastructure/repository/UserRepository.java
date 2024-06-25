@@ -2,6 +2,7 @@ package cn.rzpt.infrastructure.repository;
 
 import cn.rzpt.domain.user.model.req.UserLoginReq;
 import cn.rzpt.domain.user.model.req.UserRegisterReq;
+import cn.rzpt.domain.user.model.vo.UserInfoVO;
 import cn.rzpt.domain.user.repository.IUserRepository;
 import cn.rzpt.infrastructure.mapper.UserMapper;
 import cn.rzpt.infrastructure.po.UserPO;
@@ -36,7 +37,6 @@ public class UserRepository implements IUserRepository {
     }
 
 
-
     /**
      * 用户注册
      *
@@ -45,6 +45,8 @@ public class UserRepository implements IUserRepository {
     @Override
     public void register(UserRegisterReq req) {
         checkUserRegisterParams(req);
+        Assert.isNull(userMapper.selectOne(Wrappers.lambdaQuery(UserPO.class)
+                .eq(UserPO::getUsername, req.getUsername())), "用户名已存在");
         UserPO userPO = UserPO.builder()
                 .username(req.getUsername())
                 .password(req.getPassword())
@@ -52,10 +54,29 @@ public class UserRepository implements IUserRepository {
         userMapper.insert(userPO);
     }
 
+    @Override
+    public UserInfoVO getUserByUsername(String username) {
+        LambdaQueryWrapper<UserPO> queryWrapper = Wrappers.lambdaQuery(UserPO.class)
+                .eq(UserPO::getUsername, username);
+        UserPO userPO = userMapper.selectOne(queryWrapper);
+        if (userPO == null) {
+            return null;
+        }
+        return UserInfoVO.builder()
+                .address(userPO.getAddress())
+                .email(userPO.getEmail())
+                .id(userPO.getId())
+                .username(userPO.getUsername())
+                .password(userPO.getPassword())
+                .avatar(userPO.getAvatar())
+                .build();
+    }
+
     private void checkUserRegisterParams(UserRegisterReq req) {
         Assert.notEmpty(req.getUsername(), "用户名不能为空");
         Assert.notEmpty(req.getPassword(), "密码不能为空");
     }
+
     private void checkUserLoginParams(UserLoginReq req) {
         Assert.notEmpty(req.getUsername(), "用户名不能为空");
         Assert.notEmpty(req.getPassword(), "密码不能为空");

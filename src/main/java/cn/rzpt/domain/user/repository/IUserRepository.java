@@ -2,6 +2,7 @@ package cn.rzpt.domain.user.repository;
 
 import cn.rzpt.domain.user.model.req.UserLoginReq;
 import cn.rzpt.domain.user.model.req.UserRegisterReq;
+import cn.rzpt.domain.user.model.vo.UserInfoVO;
 import cn.rzpt.infrastructure.po.UserPO;
 
 public interface IUserRepository {
@@ -20,6 +21,14 @@ public interface IUserRepository {
      * @param req 用户注册信息请求体
      */
     void register(UserRegisterReq req);
+
+    /**
+     * 根据用户名查询用户信息
+     *
+     * @param username 用户名
+     * @return 用户信息
+     */
+    UserInfoVO getUserByUsername(String username);
 
 
 }
