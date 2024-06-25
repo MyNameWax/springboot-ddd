@@ -1,11 +1,11 @@
-package cn.rzpt.rpc;
+package cn.rzpt.interfaces.user;
 
 import cn.rzpt.common.Constants;
 import cn.rzpt.common.Result;
 import cn.rzpt.domain.user.model.req.UserLoginReq;
+import cn.rzpt.domain.user.model.req.UserRegisterReq;
 import cn.rzpt.domain.user.model.res.LoginResult;
 import cn.rzpt.domain.user.service.IUserExec;
-import com.alibaba.fastjson.JSON;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +24,12 @@ public class UserController {
     public Result login(@RequestBody UserLoginReq userLoginReq) {
         LoginResult login = userExec.login(userLoginReq);
         return Result.buildResult(Constants.ResponseCode.SUCCESS, login);
+    }
+
+    @PostMapping("/register")
+    public Result register(@RequestBody UserRegisterReq userRegisterReq) {
+        userExec.register(userRegisterReq);
+        return Result.buildResult(Constants.ResponseCode.SUCCESS);
     }
 
 }

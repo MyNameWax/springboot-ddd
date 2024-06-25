@@ -2,6 +2,7 @@ package cn.rzpt.domain.user.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.rzpt.domain.user.model.req.UserLoginReq;
+import cn.rzpt.domain.user.model.req.UserRegisterReq;
 import cn.rzpt.domain.user.model.res.LoginResult;
 import cn.rzpt.domain.user.service.IUserExec;
 import cn.rzpt.domain.user.service.UserBase;
@@ -26,13 +27,12 @@ import static cn.rzpt.common.Constants.RedisKey.LOGIN_USER_INFO;
 public class UserExecImpl extends UserBase implements IUserExec {
 
     @Resource
-    private RedisTemplate<String,String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
     private final JwtProperties jwtProperties;
     private final UserRepository userRepository;
 
     @Override
     public LoginResult login(UserLoginReq req) {
-        super.log.info("userExec:{}", req);
         UserPO userPO = userRepository.login(req);
         if (ObjectUtil.isEmpty(userPO)) {
             throw new RuntimeException("账号或密码错误");
@@ -41,5 +41,11 @@ public class UserExecImpl extends UserBase implements IUserExec {
         map.put("id", userPO.getId());
         redisTemplate.opsForValue().set(LOGIN_USER_INFO + userPO.getId(), JSON.toJSONString(userPO));
         return LoginResult.builder().token(JwtUtil.createJWT(jwtProperties.getSecret(), 64800L, map)).build();
+    }
+
+    @Override
+    public void register(UserRegisterReq req) {
+        userRepository.register(req);
+        //TODO 关联信息后续可选操作
     }
 }

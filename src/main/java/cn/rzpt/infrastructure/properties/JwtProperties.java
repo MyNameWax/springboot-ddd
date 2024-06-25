@@ -8,5 +8,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
+
+    /**
+     * Jwt生成秘钥
+     */
     private String secret;
 }

@@ -1,6 +1,7 @@
 package cn.rzpt.domain.user.service;
 
 import cn.rzpt.domain.user.model.req.UserLoginReq;
+import cn.rzpt.domain.user.model.req.UserRegisterReq;
 import cn.rzpt.domain.user.model.res.LoginResult;
 
 public interface IUserExec {
@@ -11,4 +12,11 @@ public interface IUserExec {
      * @return LoginUserVO对象
      */
     LoginResult login(UserLoginReq req);
+
+    /**
+     * 用户注册
+     *
+     * @param req 用户注册信息请求体
+     */
+    void register(UserRegisterReq req);
 }
