@@ -1,11 +1,15 @@
 package cn.rzpt.domain.user.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.rzpt.domain.role.repository.IRoleRepository;
+import cn.rzpt.domain.support.model.event.BaseDomainEvent;
+import cn.rzpt.domain.support.model.event.DomainEventPublisher;
 import cn.rzpt.domain.user.model.req.UserLoginReq;
 import cn.rzpt.domain.user.model.req.UserRegisterReq;
 import cn.rzpt.domain.user.model.res.LoginResult;
 import cn.rzpt.domain.user.service.IUserExec;
 import cn.rzpt.domain.user.service.UserBase;
+import cn.rzpt.domain.user.service.event.UserRoleListEvent;
 import cn.rzpt.infrastructure.po.UserPO;
 import cn.rzpt.infrastructure.properties.JwtProperties;
 import cn.rzpt.infrastructure.repository.UserRepository;
@@ -28,8 +32,14 @@ public class UserExecImpl extends UserBase implements IUserExec {
 
     @Resource
     private RedisTemplate<String, String> redisTemplate;
+
+    @Resource
+    private DomainEventPublisher domainEventPublisher;
+
     private final JwtProperties jwtProperties;
+    private final IRoleRepository roleRepository;
     private final UserRepository userRepository;
+
 
     @Override
     public LoginResult login(UserLoginReq req) {
@@ -45,7 +55,10 @@ public class UserExecImpl extends UserBase implements IUserExec {
 
     @Override
     public void register(UserRegisterReq req) {
-        userRepository.register(req);
-        //TODO 关联信息后续可选操作
+        // 注册用户
+        Long userId = userRepository.register(req);
+        // 用户关联默认用户角色
+        domainEventPublisher.publishEvent(new UserRoleListEvent(userId,roleRepository));
+
     }
 }

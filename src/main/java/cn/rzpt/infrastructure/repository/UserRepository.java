@@ -43,7 +43,7 @@ public class UserRepository implements IUserRepository {
      * @param req 用户注册信息请求体
      */
     @Override
-    public void register(UserRegisterReq req) {
+    public Long register(UserRegisterReq req) {
         checkUserRegisterParams(req);
         Assert.isNull(userMapper.selectOne(Wrappers.lambdaQuery(UserPO.class)
                 .eq(UserPO::getUsername, req.getUsername())), "用户名已存在");
@@ -52,6 +52,7 @@ public class UserRepository implements IUserRepository {
                 .password(req.getPassword())
                 .build();
         userMapper.insert(userPO);
+        return userPO.getId();
     }
 
     @Override

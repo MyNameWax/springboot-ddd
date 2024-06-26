@@ -20,7 +20,7 @@ public interface IUserRepository {
      *
      * @param req 用户注册信息请求体
      */
-    void register(UserRegisterReq req);
+    Long register(UserRegisterReq req);
 
     /**
      * 根据用户名查询用户信息
