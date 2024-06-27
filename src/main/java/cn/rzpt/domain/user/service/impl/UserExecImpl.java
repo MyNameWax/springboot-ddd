@@ -2,7 +2,6 @@ package cn.rzpt.domain.user.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.rzpt.domain.role.repository.IRoleRepository;
-import cn.rzpt.domain.support.model.event.BaseDomainEvent;
 import cn.rzpt.domain.support.model.event.DomainEventPublisher;
 import cn.rzpt.domain.user.model.req.UserLoginReq;
 import cn.rzpt.domain.user.model.req.UserRegisterReq;
@@ -18,7 +17,10 @@ import com.alibaba.fastjson.JSON;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,11 +56,13 @@ public class UserExecImpl extends UserBase implements IUserExec {
     }
 
     @Override
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void register(UserRegisterReq req) {
         // 注册用户
         Long userId = userRepository.register(req);
         // 用户关联默认用户角色
-        domainEventPublisher.publishEvent(new UserRoleListEvent(userId,roleRepository));
+        domainEventPublisher.publishEvent(new UserRoleListEvent(userId, roleRepository));
 
     }
 }
