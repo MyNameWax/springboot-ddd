@@ -1,12 +1,16 @@
 package cn.rzpt.domain.user.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.rzpt.domain.role.model.vo.RoleVO;
 import cn.rzpt.domain.role.repository.IRoleRepository;
-import cn.rzpt.domain.support.model.event.BaseDomainEvent;
 import cn.rzpt.domain.support.model.event.DomainEventPublisher;
+import cn.rzpt.domain.user.model.aggregates.UserRoleAggregates;
+import cn.rzpt.domain.user.model.convert.UserInfoVOMapper;
 import cn.rzpt.domain.user.model.req.UserLoginReq;
 import cn.rzpt.domain.user.model.req.UserRegisterReq;
 import cn.rzpt.domain.user.model.res.LoginResult;
+import cn.rzpt.domain.user.model.vo.UserInfoVO;
+import cn.rzpt.domain.user.repository.IUserRoleRepository;
 import cn.rzpt.domain.user.service.IUserExec;
 import cn.rzpt.domain.user.service.UserBase;
 import cn.rzpt.domain.user.service.event.UserRoleListEvent;
@@ -18,7 +22,10 @@ import com.alibaba.fastjson.JSON;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,30 +42,43 @@ public class UserExecImpl extends UserBase implements IUserExec {
 
     @Resource
     private DomainEventPublisher domainEventPublisher;
-
     private final JwtProperties jwtProperties;
     private final IRoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final IUserRoleRepository userRoleRepository;
 
 
     @Override
     public LoginResult login(UserLoginReq req) {
+        // 用户登录
         UserPO userPO = userRepository.login(req);
+        // 用户信息转换
+        UserInfoVO userInfoVO = UserInfoVOMapper.INSTANCE.toVo(userPO);
+        // 获取角色信息
+        RoleVO roleVo = userRoleRepository.getRoleById(userPO.getId());
+        // 构建聚合
+        UserRoleAggregates userRoleAggregates = UserRoleAggregates
+                .builder()
+                .userInfoVO(userInfoVO)
+                .roleVO(roleVo)
+                .build();
         if (ObjectUtil.isEmpty(userPO)) {
             throw new RuntimeException("账号或密码错误");
         }
         Map<String, Object> map = new HashMap<>();
         map.put("id", userPO.getId());
-        redisTemplate.opsForValue().set(LOGIN_USER_INFO + userPO.getId(), JSON.toJSONString(userPO));
-        return LoginResult.builder().token(JwtUtil.createJWT(jwtProperties.getSecret(), 64800L, map)).build();
+        redisTemplate.opsForValue().set(LOGIN_USER_INFO + userPO.getId(), JSON.toJSONString(userRoleAggregates));
+        return LoginResult.builder().token(JwtUtil.createJWT(jwtProperties.getSecret(), 64800L, map)).role(roleVo).build();
     }
 
     @Override
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void register(UserRegisterReq req) {
         // 注册用户
         Long userId = userRepository.register(req);
         // 用户关联默认用户角色
-        domainEventPublisher.publishEvent(new UserRoleListEvent(userId,roleRepository));
+        domainEventPublisher.publishEvent(new UserRoleListEvent(userId, roleRepository));
 
     }
 }

@@ -1,6 +1,7 @@
 package cn.rzpt.infrastructure.po;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +10,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@TableName("role")
+@TableName("user_role")
 @NoArgsConstructor
 @AllArgsConstructor
-public class RolePO {
+public class UserRolePO {
+
+    @TableId(type = IdType.AUTO)
     private Long id;
-    private String code;
-    private String name;
-    @TableField(value = "`desc`")
-    private String desc;
+    private Long uId;
+    private Long rId;
 }

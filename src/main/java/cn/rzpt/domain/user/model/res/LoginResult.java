@@ -1,5 +1,6 @@
 package cn.rzpt.domain.user.model.res;
 
+import cn.rzpt.domain.role.model.vo.RoleVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,9 @@ public class LoginResult {
      * 用户登录Token令牌
      */
     private String token;
+
+    /**
+     * 用户角色信息
+     */
+    private RoleVO role;
 }

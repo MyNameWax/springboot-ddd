@@ -68,7 +68,6 @@ public class UserRepository implements IUserRepository {
                 .email(userPO.getEmail())
                 .id(userPO.getId())
                 .username(userPO.getUsername())
-                .password(userPO.getPassword())
                 .avatar(userPO.getAvatar())
                 .build();
     }

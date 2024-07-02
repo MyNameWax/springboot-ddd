@@ -19,6 +19,6 @@ import java.util.List;
 public class UserRoleAggregates {
 
     private UserInfoVO userInfoVO;
-    private List<RoleVO> roleVOList;
+    private RoleVO roleVO;
 
 }

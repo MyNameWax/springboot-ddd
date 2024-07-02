@@ -1,13 +1,16 @@
 package cn.rzpt.infrastructure.repository;
 
 import cn.hutool.core.lang.Assert;
+import cn.rzpt.common.Constants;
 import cn.rzpt.domain.role.model.req.RolePageReq;
 import cn.rzpt.domain.role.model.vo.RoleVO;
 import cn.rzpt.domain.role.repository.IRoleRepository;
 import cn.rzpt.infrastructure.mapper.RoleMapper;
 import cn.rzpt.infrastructure.mapper.UserMapper;
+import cn.rzpt.infrastructure.mapper.UserRoleMapper;
 import cn.rzpt.infrastructure.po.RolePO;
 import cn.rzpt.infrastructure.po.UserPO;
+import cn.rzpt.infrastructure.po.UserRolePO;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoleRepository implements IRoleRepository {
 
+    private final UserRoleMapper userRoleMapper;
     private final RoleMapper roleMapper;
-    private final UserMapper userMapper;
 
 
     /**
@@ -35,9 +38,12 @@ public class RoleRepository implements IRoleRepository {
      */
     @Override
     public void addDefaultRole(Long userId) {
-        UserPO userPO = checkAddDefaultRoleParams(userId);
-        //TODO 给用户添加默认角色
-        log.info("给用户添加默认角色");
+        log.info("用户:{},添加默认角色",userId);
+        UserRolePO userRolePO = UserRolePO.builder()
+                .uId(userId)
+                .rId(Constants.Role.USER.getId())
+                .build();
+        userRoleMapper.insert(userRolePO);
     }
 
 
@@ -58,14 +64,4 @@ public class RoleRepository implements IRoleRepository {
                 .build()).toList();
     }
 
-    /**
-     * 校验添加默认角色参数
-     *
-     * @param userId 用户id
-     */
-    private UserPO checkAddDefaultRoleParams(Long userId) {
-        UserPO userPO = userMapper.selectById(userId);
-        Assert.isNull(userPO, "用户不存在");
-        return userPO;
-    }
 }

@@ -1,4 +1,4 @@
-package cn.rzpt.interfaces.user;
+package cn.rzpt.adapter.user;
 
 import cn.rzpt.common.Constants;
 import cn.rzpt.common.Result;
