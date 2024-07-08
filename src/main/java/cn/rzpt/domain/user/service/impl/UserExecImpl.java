@@ -28,8 +28,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,19 +75,16 @@ public class UserExecImpl extends UserBase implements IUserExec {
         }
         Map<String, Object> map = new HashMap<>();
         map.put("id", userPO.getId());
-        String token = JwtUtil.createJWT(jwtProperties.getSecret(), 64800L, map);
-        redisTemplate.opsForValue().set(LOGIN_USER_INFO + token, JSON.toJSONString(userRoleAggregates));
-        return LoginResult.builder().token(token).role(roleVo).build();
+        redisTemplate.opsForValue().set(LOGIN_USER_INFO + userPO.getId(), JSON.toJSONString(userPO));
+        return LoginResult.builder().token(JwtUtil.createJWT(jwtProperties.getSecret(), 64800L, map)).build();
     }
 
     @Override
-    @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void register(UserRegisterReq req) {
         // 注册用户
         Long userId = userRepository.register(req);
         // 用户关联默认用户角色
-        domainEventPublisher.publishEvent(new UserRoleListEvent(userId, roleRepository));
+        domainEventPublisher.publishEvent(new UserRoleListEvent(userId,roleRepository));
 
     }
 }

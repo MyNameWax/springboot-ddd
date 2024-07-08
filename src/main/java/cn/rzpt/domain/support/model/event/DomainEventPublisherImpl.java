@@ -2,7 +2,6 @@ package cn.rzpt.domain.support.model.event;
 
 import com.alibaba.fastjson.JSON;
 import jakarta.annotation.Resource;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
