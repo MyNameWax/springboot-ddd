@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Component
 @RestControllerAdvice
-public class GlobalException {
+public class GlobalException extends Throwable {
 
     @ExceptionHandler(Exception.class)
     public Result handleException(Exception e) {

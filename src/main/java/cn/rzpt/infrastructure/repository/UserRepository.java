@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -49,10 +50,20 @@ public class UserRepository implements IUserRepository {
                 .eq(UserPO::getUsername, req.getUsername())), "用户名已存在");
         UserPO userPO = UserPO.builder()
                 .username(req.getUsername())
-                .password(req.getPassword())
+                .password(generatorPassword(req.getPassword()))
                 .build();
         userMapper.insert(userPO);
         return userPO.getId();
+    }
+
+    /**
+     * 生成加密后密码
+     *
+     * @param password 明文密码
+     * @return 密文密码
+     */
+    private String generatorPassword(String password) {
+        return new BCryptPasswordEncoder().encode(password);
     }
 
     @Override

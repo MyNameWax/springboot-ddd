@@ -5,7 +5,9 @@ import cn.rzpt.infrastructure.po.UserPO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
+
+@Mapper(componentModel = SPRING)
 public interface UserInfoVOMapper {
     UserInfoVOMapper INSTANCE = Mappers.getMapper( UserInfoVOMapper.class );
     UserInfoVO toVo(UserPO userPO);

@@ -17,7 +17,9 @@ public class UserRoleListEvent extends BaseDomainEvent {
     public UserRoleListEvent(Long id, IRoleRepository roleRepository) {
         super(id, "cn.rzpt.domain.user.service.impl.UserExecImpl[method - register]");
         this.roleRepository = roleRepository;
+
         roleRepository.addDefaultRole(id);
+
     }
 
 }

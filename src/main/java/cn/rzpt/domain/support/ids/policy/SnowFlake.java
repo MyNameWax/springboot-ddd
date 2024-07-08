@@ -8,11 +8,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 
-/**
- * @description
- * @author:吴海龙 date:2023/6/15
- * Copyright:wuhailong
- */
 @Component
 public class SnowFlake implements IIdGenerator {
     private Snowflake snowFlake;

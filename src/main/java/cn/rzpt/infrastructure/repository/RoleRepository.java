@@ -1,15 +1,12 @@
 package cn.rzpt.infrastructure.repository;
 
-import cn.hutool.core.lang.Assert;
 import cn.rzpt.common.Constants;
 import cn.rzpt.domain.role.model.req.RolePageReq;
 import cn.rzpt.domain.role.model.vo.RoleVO;
 import cn.rzpt.domain.role.repository.IRoleRepository;
 import cn.rzpt.infrastructure.mapper.RoleMapper;
-import cn.rzpt.infrastructure.mapper.UserMapper;
 import cn.rzpt.infrastructure.mapper.UserRoleMapper;
 import cn.rzpt.infrastructure.po.RolePO;
-import cn.rzpt.infrastructure.po.UserPO;
 import cn.rzpt.infrastructure.po.UserRolePO;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -38,7 +35,7 @@ public class RoleRepository implements IRoleRepository {
      */
     @Override
     public void addDefaultRole(Long userId) {
-        log.info("用户:{},添加默认角色",userId);
+        log.info("用户:{},添加默认角色", userId);
         UserRolePO userRolePO = UserRolePO.builder()
                 .uId(userId)
                 .rId(Constants.Role.USER.getId())

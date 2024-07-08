@@ -15,8 +15,5 @@ public class RoleExecImpl implements IRoleExec {
 
     private final RoleRepository roleRepository;
 
-    @Override
-    public List<RoleVO> roleList(RolePageReq req) {
-        return roleRepository.roleList(req);
-    }
+
 }

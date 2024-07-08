@@ -1,5 +1,6 @@
 package cn.rzpt.domain.user.service.impl;
 
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.rzpt.domain.role.model.vo.RoleVO;
 import cn.rzpt.domain.role.repository.IRoleRepository;
@@ -23,6 +24,9 @@ import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -46,12 +50,18 @@ public class UserExecImpl extends UserBase implements IUserExec {
     private final IRoleRepository roleRepository;
     private final UserRepository userRepository;
     private final IUserRoleRepository userRoleRepository;
+    private final AuthenticationManager authenticationManager;
 
 
     @Override
     public LoginResult login(UserLoginReq req) {
         // 用户登录
-        UserPO userPO = userRepository.login(req);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword());
+        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        if (ObjUtil.isNull(authenticate)) {
+            throw new RuntimeException("账号或密码错误");
+        }
+        UserPO userPO = (UserPO) authenticate.getPrincipal();
         // 用户信息转换
         UserInfoVO userInfoVO = UserInfoVOMapper.INSTANCE.toVo(userPO);
         // 获取角色信息
@@ -67,8 +77,9 @@ public class UserExecImpl extends UserBase implements IUserExec {
         }
         Map<String, Object> map = new HashMap<>();
         map.put("id", userPO.getId());
-        redisTemplate.opsForValue().set(LOGIN_USER_INFO + userPO.getId(), JSON.toJSONString(userRoleAggregates));
-        return LoginResult.builder().token(JwtUtil.createJWT(jwtProperties.getSecret(), 64800L, map)).role(roleVo).build();
+        String token = JwtUtil.createJWT(jwtProperties.getSecret(), 64800L, map);
+        redisTemplate.opsForValue().set(LOGIN_USER_INFO + token, JSON.toJSONString(userRoleAggregates));
+        return LoginResult.builder().token(token).role(roleVo).build();
     }
 
     @Override
