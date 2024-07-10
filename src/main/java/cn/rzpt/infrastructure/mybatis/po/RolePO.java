@@ -1,4 +1,4 @@
-package cn.rzpt.infrastructure.po;
+package cn.rzpt.infrastructure.mybatis.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

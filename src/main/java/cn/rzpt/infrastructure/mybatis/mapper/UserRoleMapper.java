@@ -1,6 +1,6 @@
-package cn.rzpt.infrastructure.mapper;
+package cn.rzpt.infrastructure.mybatis.mapper;
 
-import cn.rzpt.infrastructure.po.UserRolePO;
+import cn.rzpt.infrastructure.mybatis.po.UserRolePO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

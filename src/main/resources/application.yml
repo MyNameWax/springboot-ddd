@@ -14,3 +14,11 @@ spring:
       timeout: 3600000
 jwt:
   secret: cereshuzhitingnizhenbangcereshuzhitingnizhenbang
+mongo-plus:
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      connect-timeout-m-s: 50000
+      database: ddd_logs
+  log: true

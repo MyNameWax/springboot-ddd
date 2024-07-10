@@ -1,7 +1,7 @@
 package cn.rzpt.domain.user.model.convert;
 
 import cn.rzpt.domain.user.model.vo.UserInfoVO;
-import cn.rzpt.infrastructure.po.UserPO;
+import cn.rzpt.infrastructure.mybatis.po.UserPO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

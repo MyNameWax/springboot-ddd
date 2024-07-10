@@ -3,7 +3,7 @@ package cn.rzpt.infrastructure.util;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 
-public class WebUtils {
+public class WebUtil {
     /**
      * 将字符串渲染到客户端
      *

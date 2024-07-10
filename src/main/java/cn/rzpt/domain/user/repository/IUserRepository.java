@@ -3,7 +3,7 @@ package cn.rzpt.domain.user.repository;
 import cn.rzpt.domain.user.model.req.UserLoginReq;
 import cn.rzpt.domain.user.model.req.UserRegisterReq;
 import cn.rzpt.domain.user.model.vo.UserInfoVO;
-import cn.rzpt.infrastructure.po.UserPO;
+import cn.rzpt.infrastructure.mybatis.po.UserPO;
 
 public interface IUserRepository {
 

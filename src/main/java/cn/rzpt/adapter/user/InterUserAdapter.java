@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
-public class UserController {
+public class InterUserAdapter {
 
     private final IUserExec userExec;
     private final IUserRepository userRepository;

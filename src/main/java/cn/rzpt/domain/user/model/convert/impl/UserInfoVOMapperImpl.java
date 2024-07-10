@@ -3,7 +3,7 @@ package cn.rzpt.domain.user.model.convert.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.rzpt.domain.user.model.convert.UserInfoVOMapper;
 import cn.rzpt.domain.user.model.vo.UserInfoVO;
-import cn.rzpt.infrastructure.po.UserPO;
+import cn.rzpt.infrastructure.mybatis.po.UserPO;
 
 public class UserInfoVOMapperImpl implements UserInfoVOMapper {
 

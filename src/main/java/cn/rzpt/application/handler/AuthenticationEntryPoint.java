@@ -2,7 +2,7 @@ package cn.rzpt.application.handler;
 
 import cn.hutool.json.JSONUtil;
 import cn.rzpt.common.Result;
-import cn.rzpt.infrastructure.util.WebUtils;
+import cn.rzpt.infrastructure.util.WebUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,6 @@ public class AuthenticationEntryPoint implements org.springframework.security.we
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) {
         Result result = new Result(String.valueOf(HttpStatus.UNAUTHORIZED.value()), "请先登录");
-        WebUtils.renderString(response, JSONUtil.toJsonStr(result));
+        WebUtil.renderString(response, JSONUtil.toJsonStr(result));
     }
 }

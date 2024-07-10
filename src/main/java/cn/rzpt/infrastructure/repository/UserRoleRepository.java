@@ -3,10 +3,10 @@ package cn.rzpt.infrastructure.repository;
 
 import cn.rzpt.domain.role.model.vo.RoleVO;
 import cn.rzpt.domain.user.repository.IUserRoleRepository;
-import cn.rzpt.infrastructure.mapper.RoleMapper;
-import cn.rzpt.infrastructure.mapper.UserRoleMapper;
-import cn.rzpt.infrastructure.po.RolePO;
-import cn.rzpt.infrastructure.po.UserRolePO;
+import cn.rzpt.infrastructure.mybatis.mapper.RoleMapper;
+import cn.rzpt.infrastructure.mybatis.mapper.UserRoleMapper;
+import cn.rzpt.infrastructure.mybatis.po.RolePO;
+import cn.rzpt.infrastructure.mybatis.po.UserRolePO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
