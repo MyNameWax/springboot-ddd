@@ -1,6 +1,6 @@
-package cn.rzpt.domain.log.service.impl;
+package cn.rzpt.domain.support.log.impl;
 
-import cn.rzpt.domain.log.service.LogsService;
+import cn.rzpt.domain.support.log.LogsService;
 import cn.rzpt.infrastructure.mongo.po.LogPO;
 import com.anwen.mongo.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

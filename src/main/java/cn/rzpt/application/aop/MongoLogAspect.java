@@ -1,6 +1,6 @@
 package cn.rzpt.application.aop;
 
-import cn.rzpt.domain.log.service.LogsService;
+import cn.rzpt.domain.support.log.LogsService;
 import cn.rzpt.domain.user.model.aggregates.UserRoleAggregates;
 import cn.rzpt.infrastructure.mongo.po.LogPO;
 import cn.rzpt.infrastructure.util.LogUtil;

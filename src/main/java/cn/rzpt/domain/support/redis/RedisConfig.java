@@ -1,7 +1,6 @@
-package cn.rzpt.infrastructure.config;
+package cn.rzpt.domain.support.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

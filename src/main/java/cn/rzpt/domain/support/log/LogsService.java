@@ -1,4 +1,4 @@
-package cn.rzpt.domain.log.service;
+package cn.rzpt.domain.support.log;
 
 import cn.rzpt.infrastructure.mongo.po.LogPO;
 import com.anwen.mongo.service.IService;
