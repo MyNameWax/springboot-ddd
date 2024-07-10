@@ -1,7 +1,6 @@
 package cn.rzpt.infrastructure.mongo.po;
 
 import com.anwen.mongo.annotation.ID;
-import com.anwen.mongo.annotation.collection.CollectionField;
 import com.anwen.mongo.annotation.collection.CollectionName;
 import com.anwen.mongo.enums.IdTypeEnum;
 import lombok.AllArgsConstructor;
@@ -14,6 +13,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
+@CollectionName(value = "logs")
 @NoArgsConstructor
 @AllArgsConstructor
 public class LogPO {

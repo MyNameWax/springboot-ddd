@@ -22,3 +22,8 @@ mongo-plus:
       connect-timeout-m-s: 50000
       database: ddd_logs
   log: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
