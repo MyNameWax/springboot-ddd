@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 用户表仓储对象
+ * @author waxja
  */
 @Component
 @RequiredArgsConstructor

@@ -36,7 +36,13 @@ public class MongoLogAspect {
         log.info("日志切点进入成功");
         //获取请求参数
         String requestParam = "";
+        // 获取请求结果
+        String requestResult = "";
+        if (joinPoint.getArgs().length > 0) {
+            requestParam = JSON.toJSONString(joinPoint.getArgs());
+        }
         LogPO logPO = new LogPO();
+        logPO.setRequestParams(requestParam);
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             logPO.setUserId(0L);
             logPO.setUsername("匿名用户");
@@ -48,7 +54,7 @@ public class MongoLogAspect {
         logPO.setClassName(joinPoint.getTarget().getClass().getSimpleName());
         logPO.setMethod(joinPoint.getSignature().getName());
         logPO.setCreateDate(LocalDate.now());
-        logPO.setResponseResults(requestParam);
+        logPO.setResponseResults(requestResult);
         if (value != null) {
             logPO.setResponseResults(JSON.toJSONString(value));
         }

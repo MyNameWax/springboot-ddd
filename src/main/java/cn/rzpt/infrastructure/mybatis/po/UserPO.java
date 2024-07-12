@@ -1,6 +1,8 @@
 package cn.rzpt.infrastructure.mybatis.po;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -54,10 +56,26 @@ public class UserPO implements Serializable, UserDetails {
      */
     private String email;
 
+    /**
+     * 用户角色
+     */
+    @TableField(exist = false)
+    private List<RolePO> role = new ArrayList<>();
+
+    /**
+     * 用户权限
+     */
+    @TableField(exist = false)
+    private List<String> perms = new ArrayList<>();
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        //TODO 获取权限
+        List<String> perm = this.getPerms();
+        if (CollUtil.isNotEmpty(perm)) {
+            return perm.stream().map(SimpleGrantedAuthority::new).toList();
+        }
         return List.of();
     }
 

@@ -61,6 +61,11 @@ public class LogPO {
     private String requestURI;
 
     /**
+     * 请求参数
+     */
+    private String requestParams;
+
+    /**
      * 响应结果
      */
     private String responseResults;

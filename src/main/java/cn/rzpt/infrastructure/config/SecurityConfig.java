@@ -58,11 +58,14 @@ public class SecurityConfig {
     @SneakyThrows
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
+        // 禁用session管理器
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        // 配置权限
         httpSecurity.authorizeHttpRequests(request -> {
             request.requestMatchers("/user/login", "/user/register", "/actuator/**").permitAll()
                     .anyRequest().authenticated();
         });
+        // 添加过滤器
         httpSecurity.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity.exceptionHandling(access -> access.accessDeniedHandler(accessDeniedHandler));
         httpSecurity.exceptionHandling(authenticationConfiguration -> authenticationConfiguration.authenticationEntryPoint(authenticationEntryPoint));
