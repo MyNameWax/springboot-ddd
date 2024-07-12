@@ -60,7 +60,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.authorizeHttpRequests(request -> {
-            request.requestMatchers("/user/login", "/user/register","/actuator/**").permitAll()
+            request.requestMatchers("/user/login", "/user/register", "/actuator/**").permitAll()
                     .anyRequest().authenticated();
         });
         httpSecurity.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
