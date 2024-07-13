@@ -71,7 +71,6 @@ public class UserPO implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        //TODO 获取权限
         List<String> perm = this.getPerms();
         if (CollUtil.isNotEmpty(perm)) {
             return perm.stream().map(SimpleGrantedAuthority::new).toList();

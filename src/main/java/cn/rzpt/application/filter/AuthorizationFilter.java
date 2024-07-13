@@ -49,8 +49,12 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         if (ObjUtil.isNull(userRoleAggregates.getUserInfoVO())) {
             throw new RuntimeException("请先登录");
         }
-
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userRoleAggregates, null, null);
+        /**
+         * Arg1: 登录的用户信息
+         * Arg2: 密码(因为已经登录过了,所以直接null即可)
+         * Arg3: 权限信息
+         */
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userRoleAggregates, null, userRoleAggregates.getUserInfoVO().getUserPO().getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         filterChain.doFilter(request, response);
     }

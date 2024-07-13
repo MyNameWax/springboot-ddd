@@ -17,8 +17,4 @@ public class LoginResult {
      */
     private String token;
 
-    /**
-     * 用户角色信息
-     */
-    private RoleVO role;
 }

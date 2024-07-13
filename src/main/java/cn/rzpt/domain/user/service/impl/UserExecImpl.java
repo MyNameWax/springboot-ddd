@@ -61,6 +61,7 @@ public class UserExecImpl extends UserBase implements IUserExec {
         UserPO userPO = (UserPO) authenticate.getPrincipal();
         // 用户信息转换
         UserInfoVO userInfoVO = BeanUtil.copyProperties(userPO, UserInfoVO.class);
+        userInfoVO.setUserPO(userPO);
         // 获取角色信息
         RoleVO roleVo = userRoleRepository.getRoleById(userPO.getId());
         // 构建聚合
@@ -75,7 +76,7 @@ public class UserExecImpl extends UserBase implements IUserExec {
         Map<String, Object> map = new HashMap<>();
         map.put("id", userPO.getId());
         redisTemplate.opsForValue().set(LOGIN_USER_INFO + userPO.getId(), JSON.toJSONString(userRoleAggregates));
-        return LoginResult.builder().token(JwtUtil.createJWT(jwtProperties.getSecret(), 604800000L, map)).role(roleVo).build();
+        return LoginResult.builder().token(JwtUtil.createJWT(jwtProperties.getSecret(), 604800000L, map)).build();
     }
 
     @Override

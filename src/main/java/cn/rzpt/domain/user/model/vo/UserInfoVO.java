@@ -1,5 +1,6 @@
 package cn.rzpt.domain.user.model.vo;
 
+import cn.rzpt.infrastructure.mybatis.po.UserPO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,5 +39,10 @@ public class UserInfoVO {
      * 邮箱
      */
     private String email;
+
+    /**
+     * 用户信息
+     */
+    private UserPO userPO;
 
 }

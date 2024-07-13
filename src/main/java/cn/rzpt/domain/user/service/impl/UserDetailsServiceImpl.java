@@ -39,7 +39,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<RolePO> rolePOS = roleMapper.selectBatchIds(list);
         userPO.setRole(rolePOS);
         //TODO 通过角色信息查询权限信息(order:create、order:delete)
-
         return userPO;
     }
 }
