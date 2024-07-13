@@ -6,7 +6,6 @@ import cn.hutool.json.JSONUtil;
 import cn.rzpt.domain.user.model.aggregates.UserRoleAggregates;
 import cn.rzpt.infrastructure.properties.JwtProperties;
 import cn.rzpt.infrastructure.util.JwtUtil;
-import com.alibaba.fastjson2.JSON;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

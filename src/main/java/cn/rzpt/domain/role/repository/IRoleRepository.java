@@ -2,6 +2,7 @@ package cn.rzpt.domain.role.repository;
 
 import cn.rzpt.domain.role.model.req.RolePageReq;
 import cn.rzpt.domain.role.model.vo.RoleVO;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.List;
 
@@ -21,6 +22,6 @@ public interface IRoleRepository {
      * @param req 请求对象封装体
      * @return List<RoleVO>
      */
-    List<RoleVO> roleList(RolePageReq req);
+    Page<RoleVO> roleList(RolePageReq req);
 
 }

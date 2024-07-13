@@ -22,6 +22,11 @@ public class RolePageReq {
     private Long pageSize;
 
     /**
+     * 关键词
+     */
+    private String keyword;
+
+    /**
      * 排序字段
      */
     private String oderBy;

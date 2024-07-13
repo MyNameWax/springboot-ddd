@@ -27,7 +27,7 @@ public class MongoLogAspect {
 
     private final LogsService logsService;
 
-    @Pointcut("execution(* cn.rzpt.adapter.user.*.*(..))")
+    @Pointcut("execution(* cn.rzpt.adapter.*.*.*(..))")
     public void logPointCut() {
     }
 

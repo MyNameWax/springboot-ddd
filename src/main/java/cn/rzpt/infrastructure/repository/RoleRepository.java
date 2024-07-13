@@ -1,5 +1,6 @@
 package cn.rzpt.infrastructure.repository;
 
+import cn.hutool.core.util.StrUtil;
 import cn.rzpt.common.Constants;
 import cn.rzpt.domain.role.model.req.RolePageReq;
 import cn.rzpt.domain.role.model.vo.RoleVO;
@@ -8,13 +9,12 @@ import cn.rzpt.infrastructure.mybatis.mapper.RoleMapper;
 import cn.rzpt.infrastructure.mybatis.mapper.UserRoleMapper;
 import cn.rzpt.infrastructure.mybatis.po.RolePO;
 import cn.rzpt.infrastructure.mybatis.po.UserRolePO;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 角色存储表
@@ -51,14 +51,21 @@ public class RoleRepository implements IRoleRepository {
      * @return 角色列表
      */
     @Override
-    public List<RoleVO> roleList(RolePageReq req) {
+    public Page<RoleVO> roleList(RolePageReq req) {
         Page<RolePO> page = new Page<>(req.getPageNum(), req.getPageSize());
-        Page<RolePO> rolePOPage = roleMapper.selectPage(page, Wrappers.emptyWrapper());
-        return rolePOPage.getRecords().stream().map(item -> RoleVO.builder()
-                .code(item.getCode())
-                .name(item.getName())
-                .desc(item.getDesc())
-                .build()).toList();
+        LambdaQueryWrapper<RolePO> searchKeyWordWrapper = Wrappers.lambdaQuery(RolePO.class)
+                .like(StrUtil.isNotEmpty(req.getKeyword()), RolePO::getName, req.getKeyword());
+        Page<RolePO> rolePOPage = roleMapper.selectPage(page, searchKeyWordWrapper);
+        Page<RoleVO> roleVOPage = new Page<>();
+        roleVOPage.setSize(rolePOPage.getSize());
+        roleVOPage.setCurrent(rolePOPage.getCurrent());
+        roleVOPage.setTotal(rolePOPage.getTotal());
+        roleVOPage.setRecords(rolePOPage.getRecords().stream().map(rolePO -> RoleVO.builder()
+                .code(rolePO.getCode())
+                .desc(rolePO.getDesc())
+                .name(rolePO.getName())
+                .build()).toList());
+        return roleVOPage;
     }
 
 }
