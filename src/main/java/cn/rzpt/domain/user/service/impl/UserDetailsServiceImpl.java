@@ -1,12 +1,8 @@
 package cn.rzpt.domain.user.service.impl;
 
 import cn.hutool.core.util.ObjUtil;
-import cn.rzpt.infrastructure.mybatis.mapper.RoleMapper;
-import cn.rzpt.infrastructure.mybatis.mapper.UserMapper;
-import cn.rzpt.infrastructure.mybatis.mapper.UserRoleMapper;
-import cn.rzpt.infrastructure.mybatis.po.RolePO;
-import cn.rzpt.infrastructure.mybatis.po.UserPO;
-import cn.rzpt.infrastructure.mybatis.po.UserRolePO;
+import cn.rzpt.infrastructure.mybatis.mapper.*;
+import cn.rzpt.infrastructure.mybatis.po.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +19,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
+    private final MenuMapper menuMapper;
+    private final RoleMenuMapper roleMenuMapper;
     private final UserRoleMapper userRoleMapper;
 
     @Override
@@ -38,7 +36,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<Long> list = userRolePOS.stream().map(UserRolePO::getRId).toList();
         List<RolePO> rolePOS = roleMapper.selectBatchIds(list);
         userPO.setRole(rolePOS);
-        //TODO 通过角色信息查询权限信息(order:create、order:delete)
+        List<Long> roleIds = rolePOS.stream().map(RolePO::getId).toList();
+        LambdaQueryWrapper<RoleMenuPO> roleMenuQueryWrapper = Wrappers.lambdaQuery(RoleMenuPO.class)
+                .in(RoleMenuPO::getRoleId, roleIds);
+        List<RoleMenuPO> roleMenuPOS = roleMenuMapper.selectList(roleMenuQueryWrapper);
+        List<Long> menuIdList = roleMenuPOS.stream().map(RoleMenuPO::getMenuId).toList();
+        List<MenuPO> menuList = menuMapper.selectBatchIds(menuIdList);
+        List<String> userPerms = menuList.stream().map(MenuPO::getPerms).toList();
+        userPO.setPerms(userPerms);
         return userPO;
     }
 }

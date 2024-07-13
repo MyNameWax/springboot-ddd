@@ -2,10 +2,11 @@ package cn.rzpt.application.filter;
 
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import cn.rzpt.domain.user.model.aggregates.UserRoleAggregates;
 import cn.rzpt.infrastructure.properties.JwtProperties;
 import cn.rzpt.infrastructure.util.JwtUtil;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,7 +46,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             throw new RuntimeException("请先登录");
         }
         String jsonData = Objects.requireNonNull(redisTemplate.opsForValue().get(LOGIN_USER_INFO + claims.get("id").toString())).toString();
-        UserRoleAggregates userRoleAggregates = JSON.parseObject(jsonData, UserRoleAggregates.class);
+        UserRoleAggregates userRoleAggregates = JSONUtil.toBean(jsonData, UserRoleAggregates.class);
         if (ObjUtil.isNull(userRoleAggregates.getUserInfoVO())) {
             throw new RuntimeException("请先登录");
         }
