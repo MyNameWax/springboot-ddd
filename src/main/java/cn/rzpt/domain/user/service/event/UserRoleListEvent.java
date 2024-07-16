@@ -3,7 +3,6 @@ package cn.rzpt.domain.user.service.event;
 import cn.rzpt.domain.role.repository.IRoleRepository;
 import cn.rzpt.domain.support.model.event.BaseDomainEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 
 /**
  * 用户角色列表事件

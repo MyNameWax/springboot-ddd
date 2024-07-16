@@ -7,13 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 /**
  * 授权处理器
  */
 @Component
-public class AccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {
+public class AccessDeniedHandlerFilter implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) {
         Result result = new Result(String.valueOf(HttpStatus.FORBIDDEN.value()), "权限不足");
