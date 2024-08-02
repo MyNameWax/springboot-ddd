@@ -1,6 +1,10 @@
 server:
   port: 80
 spring:
+  ai:
+    openai:
+      api-key: sk-7OESg809wJhQnHoa310703AeFc5148Bb92Be09785bCc4d85
+      base-url: https://api.xty.app
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
